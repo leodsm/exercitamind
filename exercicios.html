@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="exercise.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Exercício de Perguntas e Respostas</title>
+</head>
+<body>
+    <header>
+        <div class="logo">ExercitaMind</div>
+
+        <nav>
+          <a href="index.html">Início</a>
+          <a href="#">Recursos</a>
+          <a href="exercicios.html">Exemplo</a>
+          <a href="#">Planos de Assinatura</a>
+          <a href="#">Contato</a>
+        </nav>
+
+        <div class="auth-buttons">
+          <a href="#">Entrar</a>
+          <a href="#" class="signup-btn">Cadastre-se</a>
+        </div>
+      </header>
+
+    <div class="exercise-banner">
+        <h1 id="subject-title">Matéria</h1>
+        <div class="search-container">
+            <input type="text" id="search" class="search" placeholder="Pesquisar matéria">
+            <button id="search-btn">🔍</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="question-text"></div>
+        <div id="options-container"></div>
+
+        <button id="answer-submit">Enviar Resposta</button>
+        <div id="answer-result"></div>
+
+        <div>Respostas Corretas: <span id='correct-count'>0</span></div>
+        <div>Respostas Incorretas: <span id="incorrect-count">0</span></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 ExercitaMind. Todos os direitos reservados.</p>
+        <a href="#">Política de Privacidade</a>
+      </footer>
+
+    <script src="scriptex.js"></script>
+</body>
+</html>
