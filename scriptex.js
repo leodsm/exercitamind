@@ -144,4 +144,3 @@ fetch(CSV_URL)
   .catch((error) => {
     console.error("Erro ao buscar o arquivo CSV:", error);
   });
-
