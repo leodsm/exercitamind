@@ -7,6 +7,15 @@ body {
   background-color: #3A8DFF;
 }
 
+#subject-search{
+  border: none;
+  border-radius: 8px;
+  padding: 20px 10px;
+  font-size: 16px;
+  outline: none;
+  width: 700px;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -140,7 +149,6 @@ a.signup-btn:hover {
   color: #FFF;
 }
 
-/* Modificações no estilo do containerdas perguntas */
 #options-container {
   display: grid;
   grid-template-columns: 1fr;
@@ -203,7 +211,6 @@ a.signup-btn:hover {
   box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
   }
   
-  /* Rodapé */
   footer {
   background-color: #0067F8;
   padding: 20px;
@@ -227,7 +234,6 @@ a.signup-btn:hover {
   color: #4D95EA;
   }
   
-  /* Responsividade */
   @media screen and (max-width: 768px) {
   header {
   flex-direction: column;
