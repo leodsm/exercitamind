@@ -131,7 +131,7 @@ optionsContainer.addEventListener("click",(e) => {
   }
   
   // Altere para o URL do arquivo JSON
-  const JSON_URL = "example.json";
+  const JSON_URL = "./example.json";
   
   fetch(JSON_URL)
   .then((response) => response.json())
