@@ -1,146 +1,230 @@
-document.getElementById("search-btn").addEventListener("click", searchSubject);
+class Question {
+  constructor(subject, questionText, correctAnswer, wrongAnswers, explanationUrl) {
+    this.subject = subject;
+    this.questionText = questionText;
+    this.correctAnswer = correctAnswer;
+    this.wrongAnswers = wrongAnswers;
+    this.explanationUrl = explanationUrl;
+  }
+}
+
+document.getElementById('search-btn').addEventListener('click', searchSubject);
+
+
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-YJsD0iNJGIJyB-eqYbrN0ohmk8zmIDC9QcMghVz32r3YuJ1GEYaFj0JaQ-WWaCEjtol8PTzfep4-/pub?output=csv';
+
+async function fetchDataFromCSV() {
+  try {
+    const response = await fetch(csvUrl);
+    const data = await response.text();
+    const rows = data.split('\n').slice(1);
+    const values = rows.map((row) => row.split(','));
+
+    return values;
+  } catch (error) {
+    console.error('Erro ao buscar dados do CSV:', error);
+  }
+}
+
+async function createQuestionsArray() {
+  const rawData = await fetchDataFromCSV();
+  const questions = [];
+
+  rawData.forEach((row) => {
+    const subject = row[0];
+    const questionText = row[1];
+    const correctAnswer = row[2];
+    const wrongAnswers = row.slice(3, 7);
+    const explanationUrl = row[7];
+
+    const question = new Question(subject, questionText, correctAnswer, wrongAnswers, explanationUrl);
+    questions.push(question);
+  });
+
+  return questions;
+}
+
+
+let questions = [];
+let currentQuestionIndex = 0;
+let correctCount = 0;
+let incorrectCount = 0;
+
+function displayQuestion(question) {
+  document.getElementById('subject-title').innerText = question.subject;
+  document.getElementById('question-text').innerText = question.questionText;
+
+  const optionsContainer = document.getElementById('options-container');
+  optionsContainer.innerHTML = '';
+
+  const shuffledAnswers = [question.correctAnswer, ...question.wrongAnswers].sort(() => Math.random() - 0.5);
+
+  shuffledAnswers.forEach((answer) => {
+    const optionContainer = document.createElement('div');
+    optionContainer.classList.add('option-container');
+
+    const optionInput = document.createElement('input');
+    optionInput.type = 'radio';
+    optionInput.name = 'options';
+
+    const optionLabel = document.createElement('label');
+    optionLabel.innerText = answer;
+
+    optionContainer.appendChild(optionInput);
+    optionContainer.appendChild(optionLabel);
+    optionsContainer.appendChild(optionContainer);
+  });
+}
+
+function displayResult(isCorrect) {
+  const resultContainer = document.getElementById('answer-result');
+  resultContainer.innerHTML = '';
+
+  const resultText = document.createElement('div');
+  resultText.innerText = isCorrect ? 'Parabéns! Resposta Certa.' : 'Resposta Errada!';
+  resultText.style.color = 'white';
+  resultText.style.padding = '10px';
+  resultText.style.marginBottom = '10px';
+  resultText.style.backgroundColor = isCorrect ? 'green' : 'red';
+
+  resultContainer.appendChild(resultText);
+
+  if (!isCorrect) {
+    const explanationLink = document.createElement('a');
+    explanationLink.innerText = 'Ver explicação';
+    explanationLink.href = questions[currentQuestionIndex].explanationUrl;
+    explanationLink.target = '_blank';
+    explanationLink.style.display = 'block';
+    explanationLink.style.marginBottom = '10px';
+
+    resultContainer.appendChild(explanationLink);
+  }
+
+  const submitButton = document.getElementById('answer-submit');
+  submitButton.innerText = 'Próxima Pergunta';
+  submitButton.removeEventListener('click', submitAnswer);
+  submitButton.addEventListener('click', resetQuestion);
+}
+
+
+let filteredQuestions;
+
+async function initialize() {
+  questions = await createQuestionsArray();
+  filteredQuestions = questions;
+  displayQuestion(questions[currentQuestionIndex]);
+}
+
+
+// ... Código anterior ...
+
+function submitAnswer() {
+  const options = document.getElementsByName('options');
+  let selectedOption = null;
+
+  options.forEach((option) => {
+    if (option.checked) {
+      selectedOption = option;
+    }
+  });
+
+  if (!selectedOption) {
+    alert('Por favor, selecione uma opção.');
+    return;
+  }
+
+  const isCorrect = questions[currentQuestionIndex].correctAnswer === selectedOption.nextSibling.textContent;
+  if (isCorrect) {
+    correctCount++;
+    document.getElementById('correct-count').innerText = correctCount;
+  } else {
+    incorrectCount++;
+    document.getElementById('incorrect-count').innerText = incorrectCount;
+  }
+
+  displayResult(isCorrect);
+}
+
+// ... Restante do código ...
+
+
+
+function resetQuestion() {
+  const resultContainer = document.getElementById('answer-result');
+  resultContainer.innerHTML = '';
+  currentQuestionIndex++;
+  displayQuestion(questions[currentQuestionIndex]);
+}
+
+function restoreSubmitButton() {
+  const submitButton = document.getElementById('answer-submit');
+  submitButton.innerText = 'Enviar Resposta';
+  submitButton.removeEventListener('click', resetQuestion);
+  submitButton.addEventListener('click', submitAnswer);
+}
+
+function resetQuestion() {
+  restoreSubmitButton();
+  const resultContainer = document.getElementById('answer-result');
+  resultContainer.innerHTML = '';
+  currentQuestionIndex++;
+  displayQuestion(questions[currentQuestionIndex]);
+}
+
+function filterQuestionsBySubject(subject) {
+  return questions.filter((question) => question.subject.toLowerCase() === subject.toLowerCase());
+}
 
 function searchSubject() {
-  // Realize a pesquisa da matéria e carregue o arquivo CSV
+  const searchInput = document.getElementById('search');
+  const subject = searchInput.value.trim();
+  filteredQuestions = filterQuestionsBySubject(subject);
+  currentQuestionIndex = 0;
+  displayQuestion(filteredQuestions[currentQuestionIndex]);
 }
 
-function handleCSV(data) {
-  // Processa os dados do CSV e exibe a matéria e as perguntas
-}
-
-function displaySubject(subject) {
-  document.getElementById("subject-title").innerText = subject;
-}
-
-function displayQuestions(questions) {
-  // Exiba as perguntas e as opções
-}
-
-function handleFileUpload(event) {
-  const file = event.target.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const data = e.target.result;
-      processCSV(data);
-    };
-    reader.readAsText(file);
-  }
-}
-
-function processCSV(csvData) {
-  const lines = csvData.split("\n");
-  const subject = lines[0].split(",")[0];
-  document.getElementById("subject-title").innerText = subject;
-
-  const questions = [];
-  for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(",");
-    if (cells.length >= 4) {
-      questions.push({
-        question: cells[0],
-        correctAnswer: cells[1],
-        wrongAnswers: cells.slice(2),
-      });
-    }
+function checkAnswer() {
+  const selectedOption = document.querySelector('input[name="option"]:checked');
+  if (!selectedOption) {
+    alert('Por favor, selecione uma opção.');
+    return;
   }
 
-  startQuiz(questions);
-}
+  const userAnswer = selectedOption.nextElementSibling.innerText;
+  const correctAnswer = filteredQuestions[currentQuestionIndex].correctAnswer;
 
-function startQuiz(questions) {
-  let currentQuestionIndex = 0;
-  let correctAnswers = 0;
-  let incorrectAnswers = 0;
+  highlightAnswers(correctAnswer, userAnswer);
 
-  function displayQuestion() {
-    const question = questions[currentQuestionIndex];
-    document.getElementById("question-text").innerText = question.question;
-
-    const options = [question.correctAnswer, ...question.wrongAnswers];
-    options.sort(() => Math.random() - 0.5);
-
-    const optionsContainer = document.getElementById("options-container");
-    optionsContainer.innerHTML = "";
-
-    options.forEach((option) => {
-      const optionElement = document.createElement("div");
-      optionElement.classList.add("option");
-      optionElement.innerHTML = `
-        <input type="radio" name="answer" value="${option === question.correctAnswer}">
-        <span>${option}</span>
-      `;
-      optionsContainer.appendChild(optionElement);
-    });
+  if (userAnswer === correctAnswer) {
+    document.getElementById('answer-result').innerHTML = 'Parabéns! Resposta Certa.';
+    correctCount++;
+  } else {
+    document.getElementById('answer-result').innerHTML = 'Resposta Errada! <a href="' + filteredQuestions[currentQuestionIndex].explanationUrl + '" target="_blank">Ver explicação</a>';
+    incorrectCount++;
   }
 
-  function checkAnswer() {
-    const selectedOption = document.querySelector('input[name="answer"]:checked');
+  document.getElementById('correct-count').innerText = correctCount;
+  document.getElementById('incorrect-count').innerText = incorrectCount;
 
-    if (!selectedOption) {
-      alert("Por favor, selecione uma opção antes de enviar.");
-      return;
-    }
+  document.getElementById('answer-submit').innerText = 'Próxima Pergunta';
+  document.getElementById('answer-submit').removeEventListener('click', submitAnswer);
+  document.getElementById('answer-submit').addEventListener('click', displayNextQuestion);
+}
 
-    const isCorrect = selectedOption.value === "true";
+function displayNextQuestion() {
+  clearHighlights();
 
-    if (isCorrect) {
-      correctAnswers++;
-      document.getElementById("correct-count").innerText = correctAnswers;
-      document.getElementById("answer-result").innerText = "Correto! Parabéns!";
-      document.getElementById("answer-result").style.color = "green";
-    } else {
-      incorrectAnswers++;
-      document.getElementById("incorrect-count").innerText = incorrectAnswers;
-      document.getElementById("answer-result").innerText = "Incorreto. Tente novamente!";
-      document.getElementById("answer-result").style.color = "red";
-    }
-
+  if (currentQuestionIndex < filteredQuestions.length - 1) {
     currentQuestionIndex++;
-
-    if (currentQuestionIndex < questions.length) {
-      displayQuestion();
-    } else {
-      document.getElementById("answer-submit").disabled = true;
-      document.getElementById("answer-result").innerText = "Fim do quiz! Verifique sua pontuação.";
-    }
+    displayQuestion(filteredQuestions[currentQuestionIndex]);
+  } else {
+    alert('Você concluiu todas as perguntas disponíveis!');
   }
-
-  displayQuestion();
-  document.getElementById("answer-submit").addEventListener("click", checkAnswer);
 }
 
-const optionsContainer = document.getElementById("options-container");
-const submitButton = document.getElementById("answer-submit");
-let selectedOption = null;
 
-optionsContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("option")) {
-    setSelectedOption(e.target);
-  } else if (e.target.closest(".option")) {
-    setSelectedOption(e.target.closest(".option"));
-  }
-});
 
-function setSelectedOption(optionElement) {
-  if (selectedOption) {
-    selectedOption.classList.remove("selected");
-  }
-  selectedOption = optionElement;
-  selectedOption.classList.add("selected");
-  const radio = selectedOption.querySelector('input[type="radio"]');
-  radio.checked = true;
-}
+document.getElementById('answer-submit').addEventListener('click', submitAnswer);
 
-// Substitua o "CSV_URL" pelo URL do arquivo CSV no Google Drive
-const CSV_URL = "ex.csv";
+initialize();
 
-fetch(CSV_URL)
-  .then((response) => response.text())
-  .then((data) => {
-    processCSV(data);
-  })
-  .catch((error) => {
-    console.error("Erro ao buscar o arquivo CSV:", error);
-  });
