@@ -72,8 +72,6 @@ a.signup-btn:hover {
   color: #FFFFFF;
 }
 
-
-
 .exercise-banner {
   display: flex;
   flex-direction: column;
@@ -142,15 +140,15 @@ a.signup-btn:hover {
   color: #FFF;
 }
 
-/* Modificações no estilo do container das perguntas */
+/* Modificações no estilo do containerdas perguntas */
 #options-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px 20px;
   margin-bottom: 20px;
-}
-
-.option {
+  }
+  
+  .option {
   display: block;
   padding: 15px;
   background-color: #3A8DFF;
@@ -160,25 +158,25 @@ a.signup-btn:hover {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s;
-}
-
-input[type="radio"]:checked + .option {
+  }
+  
+  input[type="radio"]:checked + .option {
   background-color: #1c6ed4;
-}
-
-.answer-submit:hover {
+  }
+  
+  .answer-submit:hover {
   background-color: #1c6ed4;
-}
-
-#answer-result {
+  }
+  
+  #answer-result {
   font-size: 18px;
   font-weight: 600;
   text-align: center;
   margin: 20px 0;
   color: white;
-}
-
-button#answer-submit {
+  }
+  
+  button#answer-submit {
   font-weight: 600;
   font-size: 1rem;
   color: white;
@@ -188,43 +186,67 @@ button#answer-submit {
   padding: 12px 20px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-button#answer-submit:hover {
-background-color: #1c6ed4;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.flash-green {
-background-color: rgba(0, 255, 0, 0.3);
-box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-}
-
-.flash-red {
-background-color: rgba(255, 0, 0, 0.3);
-box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-}
-
-/* Rodapé */
-footer {
-    background-color: #0067F8;
-    padding: 20px;
-    text-align: center;
+  }
+  
+  button#answer-submit:hover {
+  background-color: #1c6ed4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .flash-green {
+  background-color: rgba(0, 255, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+  
+  .flash-red {
+  background-color: rgba(255, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  }
+  
+  /* Rodapé */
+  footer {
+  background-color: #0067F8;
+  padding: 20px;
+  text-align: center;
   }
   
   footer p {
-    font-size: 12px;
-    margin: 0;
-    color: white;
+  font-size: 12px;
+  margin: 0;
+  color: white;
   }
   
   footer a {
-    color: #83b6fd;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s;
+  color: #83b6fd;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
   }
   
   footer a:hover {
-    color: #4D95EA;
+  color: #4D95EA;
+  }
+  
+  /* Responsividade */
+  @media screen and (max-width: 768px) {
+  header {
+  flex-direction: column;
+  align-items: flex-start;
+  }
+  
+  nav {
+  margin-top: 10px;
+  }
+  
+  .search {
+  width: 100%;
+  }
+  
+  .container {
+  padding: 30px;
+  }
+  
+  #options-container {
+  grid-template-columns: 1fr;
+  }
   }
