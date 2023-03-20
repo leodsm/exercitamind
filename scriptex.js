@@ -1,52 +1,51 @@
-document.getElementById("search-btn").addEventListener("click", searchSubject);
-
-function searchSubject() {
-  // Realize a pesquisa da matéria e carregue o arquivo CSV
+function processJSON(loadedJSON) {
+  const subjectData = loadedJSON;
+  searchSubject(subjectData);
 }
 
-function handleCSV(data) {
-  // Processa os dados do CSV e exibe a matéria e as perguntas
-}
+function searchSubject(subjectData) {
+  const subject = document.getElementById("subject-search").value.trim();
+  if (!subject) {
+    alert("Por favor, digite o nome da matéria.");
+    return;
+  }
 
-function displaySubject(subject) {
-  document.getElementById("subject-title").innerText = subject;
-}
+  const quizData = subjectData[subject];
 
-function displayQuestions(questions) {
-  // Exiba as perguntas e as opções
-}
+  if (!quizData) {
+    alert("Matéria não encontrada.");
+    return;
+  }
 
-function handleFileUpload(event) {
-  const file = event.target.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const data = e.target.result;
-      processCSV(data);
+  const questions = quizData.map((row) => {
+    return {
+      question: row["Pergunta"],
+      correctAnswer: row["Resposta Correta"],
+      wrongAnswers: [row["Errada 1"], row["Errada 2"], row["Errada 3"]],
     };
-    reader.readAsText(file);
-  }
-}
-
-function processCSV(csvData) {
-  const lines = csvData.split("\n");
-  const subject = lines[0].split(",")[0];
-  document.getElementById("subject-title").innerText = subject;
-
-  const questions = [];
-  for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(",");
-    if (cells.length >= 4) {
-      questions.push({
-        question: cells[0],
-        correctAnswer: cells[1],
-        wrongAnswers: cells.slice(2),
-      });
-    }
-  }
+  });
 
   startQuiz(questions);
+}
+
+function showAnswerResult(isCorrect) {
+  const answerResult = document.createElement("div");
+  answerResult.classList.add("answer-result");
+
+  if (isCorrect) {
+    answerResult.style.backgroundColor = "green";
+    answerResult.style.color = "white";
+    answerResult.innerText = "Parabéns! Resposta Correta.";
+  } else {
+    answerResult.style.backgroundColor = "red";
+    answerResult.style.color = "white";
+    answerResult.innerHTML = "Resposta errada.<br><a href='explicacao.html' style='color: white; font-size: smaller;'>Gostaria de ver uma explicação?</a>";
+  }
+
+  document.getElementById("answer-result").appendChild(answerResult);
+  setTimeout(() => {
+    document.getElementById("answer-result").removeChild(answerResult);
+  }, 3000);
 }
 
 function startQuiz(questions) {
@@ -88,13 +87,11 @@ function startQuiz(questions) {
     if (isCorrect) {
       correctAnswers++;
       document.getElementById("correct-count").innerText = correctAnswers;
-      document.getElementById("answer-result").innerText = "Correto! Parabéns!";
-      document.getElementById("answer-result").style.color = "green";
+      showAnswerResult(true);
     } else {
       incorrectAnswers++;
       document.getElementById("incorrect-count").innerText = incorrectAnswers;
-      document.getElementById("answer-result").innerText = "Incorreto. Tente novamente!";
-      document.getElementById("answer-result").style.color = "red";
+      showAnswerResult(false);
     }
 
     currentQuestionIndex++;
@@ -115,32 +112,34 @@ const optionsContainer = document.getElementById("options-container");
 const submitButton = document.getElementById("answer-submit");
 let selectedOption = null;
 
-optionsContainer.addEventListener("click", (e) => {
+optionsContainer.addEventListener("click",(e) => {
   if (e.target.classList.contains("option")) {
-    setSelectedOption(e.target);
+  setSelectedOption(e.target);
   } else if (e.target.closest(".option")) {
-    setSelectedOption(e.target.closest(".option"));
+  setSelectedOption(e.target.closest(".option"));
   }
-});
-
-function setSelectedOption(optionElement) {
+  });
+  
+  function setSelectedOption(optionElement) {
   if (selectedOption) {
-    selectedOption.classList.remove("selected");
+  selectedOption.classList.remove("selected");
   }
   selectedOption = optionElement;
   selectedOption.classList.add("selected");
   const radio = selectedOption.querySelector('input[type="radio"]');
   radio.checked = true;
-}
-
-// Substitua o "CSV_URL" pelo URL do arquivo CSV no Google Drive
-const CSV_URL = "ex.csv";
-
-fetch(CSV_URL)
-  .then((response) => response.text())
+  }
+  
+  // Altere para o URL do arquivo JSON
+  const JSON_URL = "./example.json";
+  
+  fetch(JSON_URL)
+  .then((response) => response.json())
   .then((data) => {
-    processCSV(data);
+  processJSON(data);
   })
   .catch((error) => {
-    console.error("Erro ao buscar o arquivo CSV:", error);
+  console.error("Erro ao buscar o arquivo JSON:", error);
   });
+
+  
