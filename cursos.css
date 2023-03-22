@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+font-family: 'Poppins', sans-serif;
+color: #ffffff;
+max-width: 1440px;
+margin: 0 auto;
+background-color: #3A8DFF;
+}
+
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background-color: #3A8DFF;
+padding: 20px 30px;
+margin-bottom: 20px;
+}
+
+.logo {
+font-size: 24px;
+font-weight: 600;
+color: #FFFFFF;
+}
+
+nav {
+display: flex;
+gap: 20px;
+}
+
+nav a {
+color: #FFFFFF;
+text-decoration: none;
+font-weight: 600;
+transition: color 0.3s;
+}
+
+nav a:hover {
+color: #e0eaf7;
+}
+
+.auth-buttons {
+display: flex;
+gap: 15px;
+align-items: center;
+}
+
+.auth-buttons a {
+color: #FFFFFF;
+text-decoration: none;
+font-weight: 600;
+transition: color 0.3s;
+}
+
+.auth-buttons a:hover {
+color: #58cc02;
+}
+
+.signup-btn {
+padding: 5px 10px;
+background-color: #58cc02;
+color: #FFFFFF;
+border-radius: 5px;
+transition: background-color 0.3s, color 0.3s;
+}
+
+a.signup-btn:hover {
+color: #FFFFFF;
+}
+
+.signup-btn:hover {
+background-color: #196fe9;
+color: #FFFFFF;
+}
+
+.hero-section {
+display: flex;
+flex-direction: column;
+align-items: center;
+text-align: center;
+padding: 50px 0;
+background-color: #3A8DFF;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hero-title {
+font-size: 36px;
+font-weight: 600;
+color: #fff;
+margin-bottom: 20px;
+}
+
+.site-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* altura mínima da página inteira */
+  }
+  
+
+
+/* Estilos do menu lateral */
+.sidebar {
+    position:absolute;
+    height: 100%;
+    width: 250px;
+    z-index: 1000;
+    overflow-y: auto;
+    padding-top: 20px;
+    border-right: 1px solid #0067f8;
+  }
+  
+  .sidebar a {
+    display: block;
+    padding: 5px 16px;
+    text-decoration: none;
+    font-size: 13px;
+    color: #f1f1f1;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .sidebar li{
+    font-size: 10px;
+    list-style: none;
+  }
+
+  .sidebar li a{
+    font-size: 13px;
+    list-style: none;
+  }
+
+  .sidebar ul{
+    padding: 14px;
+    margin-top: -10px;
+    margin-bottom: 0px;
+  }
+  
+  .item-menu:focus .seta {
+    transform: rotate(90deg);
+  }
+
+  .seta{
+    font-size: 10px;
+    cursor: pointer;
+    padding-left: 8px;
+  }
+
+  .item-menu {
+    display: flex;
+    align-items: center;
+  }
+
+  .main-content {
+    margin: 0 auto;
+    max-width: 800px; /* ou o valor desejado */
+    margin-top: 50px;
+    margin-left: 400px; /* Largura do aside */
+  }
+
+
+  .vantagens {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  
+  .vantagem {
+    box-sizing: border-box;
+    width: 32%;
+    background-color: #0067f8;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .vantagem img {
+    max-width: 100px;
+    height: auto;
+    display: block;
+    margin: auto;
+    margin-top: 20px ;
+  }
+  
+  .vantagem h2 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .vantagem p {
+    margin-top: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  
+  
+
+
+
+    footer {
+        background-color: #0067f8;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    footer p {
+        font-size: 12px;
+        margin: 0;
+        color: white;
+    }
+    
+    footer a {
+        color: #83b6fd;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+    
+    footer a:hover {
+        color: #4D95EA;
+    }
+    
+    /* Responsiveness */
+    @media screen and (max-width: 768px) {
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    
+        nav {
+            margin-top: 10px;
+        }
+    
+        .hero-section h1 {
+            font-size: 28px;
+        }
+    
+    
+        footer {
+            padding: 10px;
+        }
+    }
